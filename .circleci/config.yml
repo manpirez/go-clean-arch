@@ -11,6 +11,11 @@ jobs:
       # replace with your preferred image
       - image: cimg/base:stable
     steps:
+      - checkout
+      - run:
+          command: |
+            echo "Test command"
+            ls -la  
       - docker/install-docker
       - docker/build:
           image: testing 
