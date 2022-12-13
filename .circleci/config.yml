@@ -11,10 +11,10 @@ jobs:
       # replace with your preferred image
       - image: cimg/base:stable
     steps:
-      - checkout
       - setup_remote_docker:
-          version: 20.10.14
           docker_layer_caching: true
+      - checkout
+      - docker/check
       - run:
           name: "Start Service and Check That it’s Running"
           command: |
@@ -23,7 +23,10 @@ jobs:
           TAG=0.1.$CIRCLE_BUILD_NUM
           docker build -t test/circleci-demo-docker:$TAG .
           docker images
-
+      - docker/build:
+          image: evaluar/ev-multiposting
+          tag: $CIRCLE_SHA1
+      
 workflows:
   example-workflow:
     jobs:
