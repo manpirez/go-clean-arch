@@ -11,6 +11,7 @@ jobs:
       # replace with your preferred image
       - image: cimg/base:stable
     steps:
+      - docker/install-docker
       - docker/build:
           image: testing 
 
