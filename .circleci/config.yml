@@ -12,13 +12,18 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
+      - setup_remote_docker:
+          version: 20.10.14
+          docker_layer_caching: true
       - run:
+          name: "Start Service and Check That it’s Running"
           command: |
-            echo "Test command"
-            ls -la  
-      - docker/install-docker
-      - docker/build:
-          image: testing 
+            docker run -d --name my-app my-app
+            docker exec my-app curl --retry 10 --retry-connrefused http://localhost:8080
+      - run: |
+          TAG=0.1.$CIRCLE_BUILD_NUM
+          docker build -t CircleCI-Public/circleci-demo-docker:$TAG .
+          docker images
 
 workflows:
   example-workflow:
